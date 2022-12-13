@@ -4,7 +4,7 @@ const booksController = require("../controllers/booksController");
 
 router
   .route("/")
-  .get(usersController.getBook)
+  .get(booksController.getBook)
   .post(booksController.createNewBook)
   .patch(booksController.updateBook)
   .delete(booksController.deleteBook);

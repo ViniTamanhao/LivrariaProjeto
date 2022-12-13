@@ -1,5 +1,6 @@
 const Book = require("../models/Book");
 const asyncHandler = require("express-async-handler");
+const { findById } = require("../models/Book");
 
 // @desc Get a book
 // @route GET /book
@@ -50,4 +51,49 @@ const updateBook = asyncHandler(async (req, res) => {
   if (!id) {
     return res.status(400).json("Field of ID is required for updating!");
   }
+
+  const book = findById(id).exec();
+
+  if (!book) {
+    return res.status(400).json({ message: "Book not found" });
+  }
+
+  if (title) book.title = title;
+  if (description) book.description = description;
+  if (dateOfRelease) book.dateOfRelease = dateOfRelease;
+  if (isAvailable) book.isAvailable = isAvailable;
+  if (writer) book.writer = writer;
+
+  const updatedBook = await book.save();
+
+  res.json({ message: `${updatedBook.title} book updated!` });
 });
+
+// @desc Delete a book
+// @route DELETE /book
+const deleteBook = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+
+  if (!id) {
+    return res.status(400).json({ message: "Book ID Required" });
+  }
+
+  const book = await Book.findById(id).exec();
+
+  if (!book) {
+    return res.status(400).json({ message: "Book not found" });
+  }
+
+  const result = await book.deleteOne();
+
+  const reply = `Book ${result.title} with ID ${result._id}`;
+
+  res.json(reply);
+});
+
+module.exports = {
+  getBook,
+  updateBook,
+  createNewBook,
+  deleteBook,
+};
