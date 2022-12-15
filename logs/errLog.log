@@ -1,1 +1,2 @@
 20221215	13:49:54	6d478c39-bf9b-4c91-9a7f-a63c0646661e	SyntaxError: Unexpected token } in JSON at position 24	GET	/register	undefined
+20221215	15:48:03	1a7329e8-1e4e-46a7-b2de-7643d01bfc7e	SyntaxError: Unexpected token } in JSON at position 44	POST	/register	undefined
