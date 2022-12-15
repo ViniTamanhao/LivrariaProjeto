@@ -4,27 +4,41 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
+const credentials = require("./middleware/credentials");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
 const { logger, logEvents } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
+const verifyJWT = require("./middleware/verifyJWT");
 const PORT = process.env.PORT || 3500;
 
 console.log(process.env.NODE_ENV);
 
+//Connect to DB
 connectDB();
 
+//Middleware
 app.use(logger);
 
+app.use(credentials);
+
 app.use(cors(corsOptions));
+
+app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
 app.use(cookieParser());
 
+//Routes
 app.use("/", require("./routes/root"));
-app.use("/books", require("./routes/booksRoutes"));
+app.use("/register", require("./routes/register"));
+app.use("/auth", require("./routes/auth"));
 
+app.use(verifyJWT);
+app.use("/books", require("./routes/api/booksRoutes"));
+
+//errorHandler
 app.use(errorHandler);
 
 mongoose.connection.once("open", () => {

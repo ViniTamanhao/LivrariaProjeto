@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
+const Schema = mongoose.Schema;
 
-const bookSchema = new mongoose.Schema(
+const bookSchema = new Schema(
   {
     title: {
       type: String,
